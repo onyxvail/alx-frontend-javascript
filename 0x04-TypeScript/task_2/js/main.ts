@@ -1,63 +1,84 @@
-interface DirectorInterface {
+// Define interfaces
+interface Employee {
     workFromHome(): string;
     getCoffeeBreak(): string;
+}
+
+interface Director extends Employee {
     workDirectorTasks(): string;
 }
 
-interface TeacherInterface {
-    workFromHome(): string;
-    getCoffeeBreak(): string;
+interface Teacher extends Employee {
     workTeacherTasks(): string;
 }
 
-class Director implements DirectorInterface {
-    workFromHome() {
+// Implement classes
+class DirectorClass implements Director {
+    workFromHome(): string {
         return 'Working from home';
     }
 
-    getCoffeeBreak() {
+    getCoffeeBreak(): string {
         return 'Getting a coffee break';
     }
 
-    workDirectorTasks() {
+    workDirectorTasks(): string {
         return 'Getting to director tasks';
     }
 }
 
-class Teacher implements TeacherInterface {
-    workFromHome() {
+class TeacherClass implements Teacher {
+    workFromHome(): string {
         return 'Cannot work from home';
     }
 
-    getCoffeeBreak() {
+    getCoffeeBreak(): string {
         return 'Cannot have a break';
     }
 
-    workTeacherTasks() {
+    workTeacherTasks(): string {
         return 'Getting to work';
     }
 }
 
+// Function to create an employee based on salary
 function createEmployee(salary: number | string): Director | Teacher {
     if (typeof salary === 'number' && salary < 500) {
-        return new Teacher();
+        return new TeacherClass();
     } else {
-        return new Director();
+        return new DirectorClass();
     }
 }
 
+// Type guard for checking if an employee is a Director
 function isDirector(employee: Director | Teacher): employee is Director {
-    return (employee as Director).workDirectorTasks !== undefined;
+    return employee instanceof DirectorClass;
 }
 
+// Function to execute work based on the type of employee
 function executeWork(employee: Director | Teacher): string {
-    if (isDirector(employee)) {
-        return employee.workDirectorTasks();
-    } else {
-        return employee.workTeacherTasks();
-    }
+    return isDirector(employee) ? employee.workDirectorTasks() : employee.workTeacherTasks();
 }
 
 // Test the functions
-console.log(executeWork(createEmployee(200)));
-console.log(executeWork(createEmployee(1000)));
+console.log(executeWork(createEmployee(200))); // Getting to work
+console.log(executeWork(createEmployee(1000))); // Getting to director tasks
+
+// Define a String literal type named Subjects
+type Subjects = "Math" | "History";
+
+// Function to teach a class based on today's subject
+function teachClass(todayClass: Subjects): string {
+    switch (todayClass) {
+        case 'Math':
+            return 'Teaching Math';
+        case 'History':
+            return 'Teaching History';
+        default:
+            return '';
+    }
+}
+
+// Test the teachClass function
+console.log(teachClass('Math')); // Teaching Math
+console.log(teachClass('History')); // Teaching History
