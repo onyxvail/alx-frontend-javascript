@@ -33,3 +33,36 @@ const printTeacher: printTeacherFunction = (firstName, lastName) => {
 
 const result = printTeacher("John", "Doe");
 console.log(result);
+
+interface StudentConstructor {
+  new (firstName: string, lastName: string): Student;
+}
+
+interface Student {
+  firstName: string;
+  lastName: string;
+  workOnHomework(): string;
+  displayName(): string;
+}
+
+class StudentClass implements Student {
+  firstName: string;
+  lastName: string;
+
+  constructor(firstName: string, lastName: string) {
+      this.firstName = firstName;
+      this.lastName = lastName;
+  }
+
+  workOnHomework() {
+      return 'Currently working';
+  }
+
+  displayName() {
+      return this.firstName;
+  }
+}
+
+const student = new StudentClass("Alice", "Smith");
+console.log(student.workOnHomework());
+console.log(student.displayName());
